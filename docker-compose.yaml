@@ -1,12 +1,15 @@
-version: '3.5'
+version: '3.8'
 
 services:
-  MusicDB:
-    container_name: MusicDB
-    restart: always
-    ports:
-      - "5432:5432"
+  mongodb_container:
+    image: mongo:4.4
     environment:
-      - POSTGRES_PASSWORD=funnycat
-      - POSTGRES_USER=admin
-    image: postgres:15.2
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: funnycat
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+volumes:
+  mongodb_data_container:

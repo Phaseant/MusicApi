@@ -1,4 +1,4 @@
-package MusicAPI
+package entity
 
 import (
 	"context"

@@ -1,9 +1,18 @@
 package repository
 
+import (
+	"github.com/Phaseant/MusicAPI/entity"
+	"go.mongodb.org/mongo-driver/mongo"
+)
+
 type Autorization interface {
+	NewUser(user entity.User) (int, error)
 }
 
-type Album interface {
+type Album interface { //TODO
+	AddAlbum(album entity.Album) (int, error)
+	DeleteAlbum(album entity.Album) (int, error)
+	GetAlbum(album entity.Album) (int, error)
 }
 
 type Repository struct {
@@ -11,6 +20,8 @@ type Repository struct {
 	Album
 }
 
-func NewRepository() *Repository {
-	return &Repository{}
+func NewRepository(db *mongo.Client) *Repository {
+	return &Repository{
+		Autorization: NewAuthMongo(db),
+	}
 }

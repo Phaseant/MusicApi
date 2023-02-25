@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"log"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -13,6 +12,12 @@ type Config struct {
 	Username string
 	Password string
 }
+
+const (
+	DBName   = "MusicServer"
+	UserCol  = "users"
+	AlbumCol = "albums"
+)
 
 func InitMongo(cfg Config) (*mongo.Client, error) {
 
@@ -27,12 +32,6 @@ func InitMongo(cfg Config) (*mongo.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	defer func() {
-		if err = client.Disconnect(context.TODO()); err != nil {
-			log.Fatalf("error disconnecting to the database: %v", err)
-		}
-	}()
 
 	if err := client.Ping(context.TODO(), readpref.Primary()); err != nil { //check ping to verify that server is running
 		return nil, err

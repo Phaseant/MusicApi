@@ -6,7 +6,7 @@ import (
 )
 
 type Autorization interface {
-	NewUser(user entity.User) (int, error)
+	NewUser(user entity.User) (string, error)
 }
 
 type Album interface {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"os"
 
 	"github.com/Phaseant/MusicAPI/entity"
@@ -19,7 +20,7 @@ func main() {
 
 	log.SetFormatter(new(log.JSONFormatter))
 
-	if err := godotenv.Load("../../.env"); err != nil {
+	if err := godotenv.Load(".env"); err != nil {
 		log.Fatalf("error unable to load env variables: %v", err)
 	}
 
@@ -27,6 +28,12 @@ func main() {
 		Username: viper.GetString("mongodb.username"),
 		Password: os.Getenv("MONGODB_PASSWORD"),
 	})
+
+	defer func() {
+		if err = db.Disconnect(context.TODO()); err != nil {
+			log.Fatalf("error disconnecting to the database: %v", err)
+		}
+	}()
 
 	if err != nil {
 		log.Fatalf("error unable to connect to database: %v", err)
@@ -43,7 +50,7 @@ func main() {
 }
 
 func initConfig() error {
-	viper.AddConfigPath("../../configs")
+	viper.AddConfigPath("configs")
 	viper.SetConfigName("config")
 	return viper.ReadInConfig()
 }

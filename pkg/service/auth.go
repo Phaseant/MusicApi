@@ -18,7 +18,7 @@ func newAuthService(repo repository.Autorization) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) NewUser(user entity.User) (int, error) {
+func (s *AuthService) NewUser(user entity.User) (string, error) {
 	user.Password = generateHash(user.Password)
 	return s.repo.NewUser(user)
 }

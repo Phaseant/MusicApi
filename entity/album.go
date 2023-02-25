@@ -1,17 +1,21 @@
 package entity
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type Album struct {
-	Id          int    `json:"albumId" bson:"_id"`
-	Title       string `json:"title" bson:"title"`
-	Author      string `json:"author" bson:"author"`
-	Year        int    `json:"year" bson:"year"`
-	CoverURL    string `json:"coverURL" bson:"coverURL"`
-	Description string `json:"description" bson:"description"`
-	Duration    string `json:"duration" bson:"duration"`
-	Songs       []struct {
-		Id       int    `json:"songId" bson:"_id"`
-		Title    string `json:"title" bson:"title"`
-		Duration string `json:"duration" bson:"duration"`
-	} `json:"songs" bson:"songs"`
-	GeniousLink string `json:"geniousLink" bson:"geniousLink"`
+	Id          primitive.ObjectID `bson:"_id, omitempty"`
+	Title       string             `bson:"title, omitempty"`
+	Author      string             `bson:"author, omitempty"`
+	Year        int                `bson:"year, omitempty"`
+	CoverURL    string             `bson:"coverURL, omitempty"`
+	Description string             `bson:"description, omitempty"`
+	Duration    string             `bson:"duration, omitempty"`
+	Songs       []Song             `bson:"songs, omitempty"`
+	GeniousLink string             `bson:"geniousLink, omitempty"`
+}
+
+type Song struct {
+	Id       primitive.ObjectID `bson:"_id, omitempty"`
+	Title    string             `bson:"title"`
+	Duration string             `bson:"duration"`
 }

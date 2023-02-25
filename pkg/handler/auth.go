@@ -16,9 +16,14 @@ func (h *Handler) signUp(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusAccepted, &user) //??
+	id, err := h.services.Autorization.NewUser(user)
+	if err != nil {
+		log.Errorf("error trying to create new user: %v", err)
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
 
-	h.services.Autorization.NewUser(user)
+	c.JSON(http.StatusAccepted, map[string]interface{}{"id": id})
+
 }
 
 func (h *Handler) signIn(c *gin.Context) {

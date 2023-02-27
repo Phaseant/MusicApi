@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/Phaseant/MusicAPI/entity"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -24,4 +25,23 @@ func (r *AuthMongo) NewUser(user entity.User) (string, error) {
 		return "", err
 	}
 	return user.Id.Hex(), nil
+}
+
+func (r *AuthMongo) GetUser(username, password string) (entity.User, error) {
+	collection := r.db.Database(DBName).Collection(UserCol)
+	var user entity.User
+
+	filter := bson.M{"$and": []interface{}{
+		bson.D{{Key: "username", Value: username}},
+		bson.D{{Key: "password", Value: password}},
+	}}
+
+	err := collection.FindOne(context.TODO(), filter).Decode(&user)
+
+	if err != nil {
+		return entity.User{}, err
+	}
+
+	return user, nil
+
 }

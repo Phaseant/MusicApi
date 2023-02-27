@@ -7,6 +7,7 @@ import (
 
 type Autorization interface {
 	NewUser(user entity.User) (string, error)
+	GetUser(username, password string) (entity.User, error)
 }
 
 type Album interface { //TODO

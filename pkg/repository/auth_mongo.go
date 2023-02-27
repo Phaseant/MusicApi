@@ -21,6 +21,7 @@ func (r *AuthMongo) NewUser(user entity.User) (string, error) {
 	collection := r.db.Database(DBName).Collection(UserCol)
 	user.Id = primitive.NewObjectID()
 	_, err := collection.InsertOne(context.TODO(), user)
+
 	if err != nil {
 		return "", err
 	}

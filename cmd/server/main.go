@@ -8,6 +8,7 @@ import (
 	"github.com/Phaseant/MusicAPI/pkg/handler"
 	"github.com/Phaseant/MusicAPI/pkg/repository"
 	"github.com/Phaseant/MusicAPI/pkg/service"
+
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -21,7 +22,7 @@ func main() {
 	log.SetFormatter(new(log.JSONFormatter))
 
 	if err := godotenv.Load(".env"); err != nil {
-		log.Fatalf("error unable to load env variables: %v", err)
+		log.Fatalf("Error unable to load env variables: %v", err)
 	}
 
 	db, err := repository.InitMongo(repository.Config{
@@ -31,12 +32,12 @@ func main() {
 
 	defer func() {
 		if err = db.Disconnect(context.TODO()); err != nil {
-			log.Fatalf("error disconnecting to the database: %v", err)
+			log.Fatalf("Error disconnecting to the database: %v", err)
 		}
 	}()
 
 	if err != nil {
-		log.Fatalf("error unable to connect to database: %v", err)
+		log.Fatalf("Error unable to connect to database: %v", err)
 	}
 	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
@@ -45,7 +46,7 @@ func main() {
 	srv := new(entity.Server)
 
 	if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
-		log.Fatalf("error while running server: %v", err)
+		log.Fatalf("Error while running server: %v", err)
 	}
 }
 

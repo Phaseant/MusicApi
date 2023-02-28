@@ -8,6 +8,7 @@ import (
 type Autorization interface {
 	NewUser(user entity.User) (string, error)
 	GenerateToken(username, password string) (string, error)
+	ParseToken(accessToken string) (string, error)
 }
 
 type Album interface {

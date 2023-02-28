@@ -2,6 +2,7 @@ package service
 
 import (
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	"time"
 
@@ -16,7 +17,7 @@ const (
 	TokenExp     = time.Hour * 24 * 30
 )
 
-type CustomClaims struct {
+type customClaims struct {
 	jwt.StandardClaims
 	UserID string `json:"user_id"`
 }
@@ -40,7 +41,7 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 		return "", err
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, CustomClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, customClaims{
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(TokenExp).Unix(),
 			IssuedAt:  time.Now().Unix(),
@@ -48,6 +49,27 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 		user.Id.Hex(),
 	})
 	return token.SignedString([]byte(tokenSalt))
+}
+
+func (s *AuthService) ParseToken(accessToken string) (string, error) {
+	token, err := jwt.ParseWithClaims(accessToken, &customClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("token signing method is not valid")
+		}
+
+		return []byte(tokenSalt), nil
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	claims, ok := token.Claims.(*customClaims)
+	if !ok {
+		return "", errors.New("token claims is not valid")
+	}
+
+	return claims.UserID, nil
 }
 
 func generateHash(password string) string {

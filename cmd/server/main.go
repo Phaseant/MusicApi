@@ -4,10 +4,11 @@ import (
 	"context"
 	"os"
 
-	"github.com/Phaseant/MusicAPI/entity"
 	"github.com/Phaseant/MusicAPI/pkg/handler"
 	"github.com/Phaseant/MusicAPI/pkg/repository"
+	"github.com/Phaseant/MusicAPI/pkg/server"
 	"github.com/Phaseant/MusicAPI/pkg/service"
+
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -20,14 +21,14 @@ func main() {
 	})
 
 	if err := initConfig(); err != nil {
-		log.Fatalf("error initiaizing config: %v", err)
+		log.Fatalf("Error initiaizing config: %v", err)
 	}
 
 	if err := godotenv.Load(".env"); err != nil {
 		log.Fatalf("Error unable to load env variables: %v", err)
 	}
 	db, err := repository.InitMongo(repository.Config{
-		Username: viper.GetString("mongodb.username"),
+		Username: os.Getenv("MONGODB_USERNAME"),
 		Password: os.Getenv("MONGODB_PASSWORD"),
 	})
 	if err != nil {
@@ -44,7 +45,7 @@ func main() {
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 
-	srv := new(entity.Server)
+	srv := new(server.Server)
 
 	if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
 		log.Fatalf("Error while running server: %v", err)
@@ -55,13 +56,4 @@ func initConfig() error {
 	viper.AddConfigPath("configs")
 	viper.SetConfigName("config")
 	return viper.ReadInConfig()
-}
-
-func initLogger(out *os.File) {
-	log.SetFormatter(&log.TextFormatter{
-		DisableColors:   false,
-		FullTimestamp:   true,
-		TimestampFormat: "2006-05-04 15:04:03",
-	})
-	log.SetOutput(out)
 }

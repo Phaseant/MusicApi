@@ -29,12 +29,12 @@ func InitMongo(cfg Config) (*mongo.Client, error) {
 
 	clientOpts := options.Client().ApplyURI("mongodb://localhost:27017").SetAuth(credential)
 
-	client, err := mongo.Connect(context.TODO(), clientOpts) //check if connected
+	client, err := mongo.Connect(context.TODO(), clientOpts)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := client.Ping(context.TODO(), readpref.Primary()); err != nil { //check ping to verify that server is running
+	if err := client.Ping(context.TODO(), readpref.Primary()); err != nil {
 		return nil, err
 	}
 

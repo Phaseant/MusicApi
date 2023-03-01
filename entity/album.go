@@ -15,7 +15,6 @@ type Album struct {
 }
 
 type Song struct {
-	// Id       primitive.ObjectID `bson:"_id, omitempty" json:"omitempty"`
 	Title    string `bson:"title" json:"title,omitempty"`
 	Duration string `bson:"duration" json:"duration,omitempty"`
 }

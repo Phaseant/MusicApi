@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/Phaseant/MusicAPI/entity"
+	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -25,6 +26,7 @@ func (r *AlbumRepo) AddAlbum(album entity.Album) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	log.Info("Added a new album with id: ", album.Id.Hex())
 	return album.Id.Hex(), nil
 }
 
@@ -44,7 +46,7 @@ func (r *AlbumRepo) GetAlbum(id string) (entity.Album, error) {
 	if err != nil {
 		return entity.Album{}, err
 	}
-
+	log.Info("Returned album with id: ", album.Id.Hex())
 	return album, nil
 }
 
@@ -70,7 +72,7 @@ func (r *AlbumRepo) GetAllAlbums() ([]entity.Album, error) {
 	if err := cursor.Err(); err != nil {
 		return []entity.Album{}, err
 	}
-
+	log.Info("Returned all albums from database")
 	return albums, nil
 }
 
@@ -84,6 +86,8 @@ func (r *AlbumRepo) DeleteAlbum(id string) bool {
 	filter := bson.D{{Key: "_id", Value: objId}}
 
 	_, err = collection.DeleteOne(context.TODO(), filter)
+
+	log.Info("deleted album with id: ", id)
 
 	return err == nil //if no errors returns true
 }

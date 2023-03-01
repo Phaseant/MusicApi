@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 
+	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -36,5 +37,7 @@ func InitMongo(cfg Config) (*mongo.Client, error) {
 	if err := client.Ping(context.TODO(), readpref.Primary()); err != nil { //check ping to verify that server is running
 		return nil, err
 	}
+
+	log.Info("MongoDB is connected")
 	return client, err
 }

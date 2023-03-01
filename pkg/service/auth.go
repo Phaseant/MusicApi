@@ -9,6 +9,7 @@ import (
 	"github.com/Phaseant/MusicAPI/entity"
 	"github.com/Phaseant/MusicAPI/pkg/repository"
 	"github.com/dgrijalva/jwt-go"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -48,6 +49,7 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 		},
 		user.Id.Hex(),
 	})
+	log.Info("Token for user with id: ", user.Id.Hex(), " generated")
 	return token.SignedString([]byte(tokenSalt))
 }
 

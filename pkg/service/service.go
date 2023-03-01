@@ -12,6 +12,10 @@ type Autorization interface {
 }
 
 type Album interface {
+	NewAlbum(album entity.Album) (string, error)
+	GetAlbum(id string) (entity.Album, error)
+	GetAllAlbums() ([]entity.Album, error)
+	DeleteAlbum(id string) bool
 }
 
 type Service struct {
@@ -22,5 +26,6 @@ type Service struct {
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Autorization: newAuthService(repos.Autorization),
+		Album:        newAlbumService(repos.Album),
 	}
 }

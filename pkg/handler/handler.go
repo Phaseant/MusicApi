@@ -13,24 +13,30 @@ func NewHandler(services *service.Service) *Handler {
 	return &Handler{services: services}
 }
 
+const (
+	userctx  = "userID"
+	albumctx = "albumID"
+)
+
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
 	auth := router.Group("/auth")
 	{
-		auth.POST("/sign-up", h.signUp) //sign up
-		auth.POST("/sign-in", h.signIn) //sign in
+		auth.POST("/register", h.register) //sign up
+		auth.POST("/login", h.login)       //sign in
 	}
 
-	api := router.Group("/api", h.userIdentity)
+	api := router.Group("/api")
 	{
 		album := api.Group("/album")
 		{
-			album.POST("/", h.createAlbum) //create new album
-			album.GET("/", h.getAllAlbums) //get all albums
+			album.GET("/", h.getAllAlbums)     //get all albums
+			album.GET("/:albumID", h.getAlbum) //get album by its id
 
-			album.GET("/:id", h.getAlbumById)       //get album by its id
-			album.DELETE("/:id", h.deleteAlbumById) //delete album
+			//admin
+			album.POST("/", h.userIdentity, h.createAlbum)           //create new album
+			album.DELETE("/:albumID", h.userIdentity, h.deleteAlbum) //delete album
 		}
 	}
 	return router

@@ -1,15 +1,12 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
-)
-
-const (
-	userctx = "userId"
 )
 
 func (h *Handler) userIdentity(c *gin.Context) {
@@ -29,4 +26,13 @@ func (h *Handler) userIdentity(c *gin.Context) {
 	}
 
 	c.Set(userctx, userID)
+}
+
+func getUserID(c *gin.Context) (string, error) {
+	id := c.GetString(userctx)
+	if len(id) == 0 {
+		return "", fmt.Errorf("user id %v not found", id)
+	}
+
+	return id, nil
 }

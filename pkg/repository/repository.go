@@ -10,10 +10,11 @@ type Autorization interface {
 	GetUser(username, password string) (entity.User, error)
 }
 
-type Album interface { //TODO
-	AddAlbum(album entity.Album) (int, error)
-	DeleteAlbum(album entity.Album) (int, error)
-	GetAlbum(album entity.Album) (int, error)
+type Album interface {
+	AddAlbum(album entity.Album) (string, error)
+	GetAlbum(id string) (entity.Album, error)
+	GetAllAlbums() ([]entity.Album, error)
+	DeleteAlbum(id string) bool
 }
 
 type Repository struct {
@@ -24,5 +25,6 @@ type Repository struct {
 func NewRepository(db *mongo.Client) *Repository {
 	return &Repository{
 		Autorization: NewAuthMongo(db),
+		Album:        NewAlbumRepo(db),
 	}
 }

@@ -22,7 +22,6 @@ func (r *AdminRepo) IsAdmin(id string) bool {
 	collection := r.db.Database(DBName).Collection(AdminCol)
 	objID, err := primitive.ObjectIDFromHex(id)
 
-	log.Info(objID)
 	if err != nil {
 		return false
 	}

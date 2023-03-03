@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -10,7 +9,6 @@ import (
 )
 
 func (h *Handler) adminIdentity(c *gin.Context) {
-	// token := strings.Split(c.Request.Header["Authorization"][0], " ")[1]
 	auth := c.Request.Header.Get("Authorization")
 	if auth == "" {
 		log.Errorf("No authorization token provided")
@@ -36,11 +34,7 @@ func (h *Handler) adminIdentity(c *gin.Context) {
 	}
 }
 
-func getUserID(c *gin.Context) (string, error) {
+func adminFlag(c *gin.Context) bool {
 	id := c.GetString(userctx)
-	if len(id) == 0 {
-		return "", fmt.Errorf("user id not found")
-	}
-
-	return id, nil
+	return len(id) != 0
 }

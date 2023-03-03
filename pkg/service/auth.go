@@ -8,20 +8,17 @@ import (
 
 	"github.com/Phaseant/MusicAPI/entity"
 	"github.com/Phaseant/MusicAPI/pkg/repository"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 	log "github.com/sirupsen/logrus"
 )
 
 const (
 	passwordSalt = "gekkfoidsfosdf33rksm..34*2@"
-	tokenSalt    = "kaphwroeh33sdf##4(#*$)f//der"
 	TokenExp     = time.Hour * 24 * 30
+	userClaim    = "userID"
 )
 
-type customClaims struct {
-	jwt.StandardClaims
-	UserID string `json:"user_id"`
-}
+var tokenSalt = []byte("kaphwroeh33sdf##4(#*$)f//der")
 
 type AuthService struct {
 	repo repository.Autorization
@@ -42,36 +39,41 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 		return "", err
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, customClaims{
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(TokenExp).Unix(),
-			IssuedAt:  time.Now().Unix(),
-		},
-		user.Id.Hex(),
-	})
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["exp"] = TokenExp
+	claims[userClaim] = user.Id
+	claims["issuedAt"] = time.Now()
+
+	signedToken, err := token.SignedString(tokenSalt)
+	if err != nil {
+		return "", err
+	}
+
 	log.Info("Token for user with id: ", user.Id.Hex(), " generated")
-	return token.SignedString([]byte(tokenSalt))
+	return signedToken, nil
 }
 
 func (s *AuthService) ParseToken(accessToken string) (string, error) {
-	token, err := jwt.ParseWithClaims(accessToken, &customClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("token signing method is not valid")
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return []byte(tokenSalt), nil
+		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
+		return tokenSalt, nil
 	})
 
 	if err != nil {
 		return "", err
 	}
-
-	claims, ok := token.Claims.(*customClaims)
-	if !ok {
-		return "", errors.New("token claims is not valid")
+	claims, ok := token.Claims.(jwt.MapClaims)
+	_, isExists := claims[userClaim]
+	if ok && token.Valid && isExists {
+		return fmt.Sprintf("%s", claims["userID"]), err
+	} else {
+		return "", errors.New("no user id in claims")
 	}
-
-	return claims.UserID, nil
 }
 
 func generateHash(password string) string {

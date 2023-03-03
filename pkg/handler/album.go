@@ -10,10 +10,8 @@ import (
 )
 
 func (h *Handler) createAlbum(c *gin.Context) {
-	_, err := getUserID(c)
-	if err != nil {
-		log.Error(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+	ok := adminFlag(c)
+	if !ok {
 		return
 	}
 
@@ -70,17 +68,15 @@ func (h *Handler) getAlbum(c *gin.Context) {
 func (h *Handler) deleteAlbum(c *gin.Context) {
 	albumId := c.Param(albumctx)
 
-	_, err := getUserID(c)
-	if err != nil {
-		log.Error(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+	ok := adminFlag(c)
+	if !ok {
 		return
 	}
 
-	ok := h.services.DeleteAlbum(albumId)
+	ok = h.services.DeleteAlbum(albumId)
 	if !ok {
-		log.Error("error deleting album")
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": "album was not deleted"})
+		log.Info("album not found, id: ", albumId)
+		c.JSON(http.StatusBadRequest, gin.H{"Error": "Album not found", "Deleted": false})
 		return
 	}
 

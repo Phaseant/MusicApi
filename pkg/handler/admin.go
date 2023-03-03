@@ -10,9 +10,8 @@ import (
 )
 
 func (h *Handler) addAdmin(c *gin.Context) {
-	_, err := getUserID(c)
-	if err != nil {
-		log.Error(err)
+	ok := adminFlag(c)
+	if !ok {
 		return
 	}
 
@@ -24,7 +23,7 @@ func (h *Handler) addAdmin(c *gin.Context) {
 		return
 	}
 
-	err = h.services.Admin.AddAdmin(newAdmin)
+	err := h.services.Admin.AddAdmin(newAdmin)
 	if err != nil {
 		log.Error("Unable to add new admin: %v", err)
 	}

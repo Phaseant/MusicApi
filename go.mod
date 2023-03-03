@@ -3,8 +3,8 @@ module github.com/Phaseant/MusicAPI
 go 1.19
 
 require (
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.9.0
+	github.com/golang-jwt/jwt/v5 v5.0.0-rc.1
 	github.com/joho/godotenv v1.5.1
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.15.0

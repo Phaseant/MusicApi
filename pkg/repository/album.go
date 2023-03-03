@@ -85,9 +85,11 @@ func (r *AlbumRepo) DeleteAlbum(id string) bool {
 	}
 	filter := bson.D{{Key: "_id", Value: objId}}
 
-	_, err = collection.DeleteOne(context.TODO(), filter)
+	result, _ := collection.DeleteOne(context.TODO(), filter)
 
-	log.Info("Deleted album with id: ", id)
+	if result.DeletedCount > 0 {
+		log.Info("Deleted album with id: ", id)
+	}
 
-	return err == nil //if no errors returns true
+	return result.DeletedCount != 0 //if deleted returns true
 }

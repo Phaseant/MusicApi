@@ -17,14 +17,21 @@ type Album interface {
 	DeleteAlbum(id string) bool
 }
 
+type Admin interface {
+	IsAdmin(id string) bool
+	AddAdmin(entity.Admin) error
+}
+
 type Repository struct {
 	Autorization
 	Album
+	Admin
 }
 
 func NewRepository(db *mongo.Client) *Repository {
 	return &Repository{
 		Autorization: NewAuthMongo(db),
 		Album:        NewAlbumRepo(db),
+		Admin:        NewAdminRepo(db),
 	}
 }

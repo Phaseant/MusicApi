@@ -87,7 +87,7 @@ func (r *AlbumRepo) DeleteAlbum(id string) bool {
 
 	_, err = collection.DeleteOne(context.TODO(), filter)
 
-	log.Info("deleted album with id: ", id)
+	log.Info("Deleted album with id: ", id)
 
 	return err == nil //if no errors returns true
 }

@@ -18,6 +18,7 @@ const (
 	DBName   = "MusicServer"
 	UserCol  = "users"
 	AlbumCol = "albums"
+	AdminCol = "admins"
 )
 
 func InitMongo(cfg Config) (*mongo.Client, error) {

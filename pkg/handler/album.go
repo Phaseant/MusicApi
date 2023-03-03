@@ -39,7 +39,7 @@ func (h *Handler) createAlbum(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"id": id})
+	c.JSON(http.StatusOK, gin.H{"ID": id})
 }
 
 func (h *Handler) getAllAlbums(c *gin.Context) {

@@ -18,14 +18,21 @@ type Album interface {
 	DeleteAlbum(id string) bool
 }
 
+type Admin interface {
+	IsAdmin(id string) bool
+	AddAdmin(admin entity.Admin) error
+}
+
 type Service struct {
 	Autorization
 	Album
+	Admin
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Autorization: newAuthService(repos.Autorization),
 		Album:        newAlbumService(repos.Album),
+		Admin:        newAdminService(repos.Admin),
 	}
 }

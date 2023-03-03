@@ -35,9 +35,15 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			album.GET("/:albumID", h.getAlbum) //get album by its id
 
 			//admin
-			album.POST("/", h.userIdentity, h.createAlbum)           //create new album
-			album.DELETE("/:albumID", h.userIdentity, h.deleteAlbum) //delete album
+			album.POST("/", h.adminIdentity, h.createAlbum)           //create new album
+			album.DELETE("/:albumID", h.adminIdentity, h.deleteAlbum) //delete album
+		}
+
+		admin := api.Group("/admin")
+		{
+			admin.POST("/", h.adminIdentity, h.addAdmin)
 		}
 	}
+
 	return router
 }

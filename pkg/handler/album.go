@@ -27,7 +27,7 @@ func (h *Handler) createAlbum(c *gin.Context) {
 
 	id, err := h.services.Album.NewAlbum(album)
 
-	if mongo.IsDuplicateKeyError(err) { //key values : title and author together
+	if mongo.IsDuplicateKeyError(err) {
 		log.Errorf("%v", err)
 		c.JSON(http.StatusBadRequest, gin.H{"Error": "this album is already exists"})
 		return

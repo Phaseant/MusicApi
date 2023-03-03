@@ -5,7 +5,6 @@
 - CRUD operations
 - JWT token autorization
 - MongoDB database
-- Swagger documentation
 
 #### Used technologies:
 - Go

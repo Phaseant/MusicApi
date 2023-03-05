@@ -25,7 +25,7 @@ func (h *Handler) addAdmin(c *gin.Context) {
 
 	err := h.services.Admin.AddAdmin(newAdmin)
 	if err != nil {
-		log.Error("Unable to add new admin: %v", err)
+		log.Errorf("Unable to add new admin: %v", err)
 	}
 
 	if mongo.IsDuplicateKeyError(err) {

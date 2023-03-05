@@ -43,7 +43,7 @@ func (h *Handler) createAlbum(c *gin.Context) {
 func (h *Handler) getAllAlbums(c *gin.Context) {
 	albums, err := h.services.GetAllAlbums()
 	if err != nil {
-		log.Errorf("Error getting all albums: %v")
+		log.Errorf("Error getting all albums: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
 		return
 	}

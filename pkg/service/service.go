@@ -5,6 +5,8 @@ import (
 	"github.com/Phaseant/MusicAPI/pkg/repository"
 )
 
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
 type Autorization interface {
 	NewUser(user entity.User) (string, error)
 	GenerateToken(username, password string) (string, error)

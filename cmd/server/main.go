@@ -64,7 +64,7 @@ func initConfig() error {
 
 func clearDB() {
 	fmt.Println("\nBye bye...")
-	db.Disconnect(context.TODO())
+	db.Disconnect(context.Background())
 }
 
 func setLogger() {

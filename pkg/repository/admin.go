@@ -28,7 +28,7 @@ func (r *AdminRepo) IsAdmin(id string) bool {
 
 	filter := bson.D{{Key: "_id", Value: objID}}
 
-	counter, err := collection.CountDocuments(context.TODO(), filter)
+	counter, err := collection.CountDocuments(context.Background(), filter)
 	if err != nil {
 		log.Error(err)
 		return false
@@ -49,7 +49,7 @@ func (r *AdminRepo) AddAdmin(admin entity.Admin) error {
 		return err
 	}
 
-	_, err = collection.InsertOne(context.TODO(), bson.D{{Key: "_id", Value: objId}})
+	_, err = collection.InsertOne(context.Background(), bson.D{{Key: "_id", Value: objId}})
 	if err != nil {
 		return err
 	}

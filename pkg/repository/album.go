@@ -21,7 +21,7 @@ func NewAlbumRepo(db *mongo.Client) *AlbumRepo {
 func (r *AlbumRepo) AddAlbum(album entity.Album) (string, error) {
 	collection := r.db.Database(DBName).Collection(AlbumCol)
 	album.Id = primitive.NewObjectID()
-	_, err := collection.InsertOne(context.TODO(), album)
+	_, err := collection.InsertOne(context.Background(), album)
 
 	if err != nil {
 		return "", err
@@ -41,7 +41,7 @@ func (r *AlbumRepo) GetAlbum(id string) (entity.Album, error) {
 	}
 
 	filter := bson.D{{Key: "_id", Value: objId}}
-	err = collection.FindOne(context.TODO(), filter).Decode(&album)
+	err = collection.FindOne(context.Background(), filter).Decode(&album)
 
 	if err != nil {
 		return entity.Album{}, err
@@ -54,12 +54,12 @@ func (r *AlbumRepo) GetAllAlbums() ([]entity.Album, error) {
 	collection := r.db.Database(DBName).Collection(AlbumCol)
 	var albums []entity.Album
 
-	cursor, err := collection.Find(context.TODO(), bson.D{})
+	cursor, err := collection.Find(context.Background(), bson.D{})
 	if err != nil {
 		return []entity.Album{}, err
 	}
 
-	for cursor.Next(context.TODO()) {
+	for cursor.Next(context.Background()) {
 		var album entity.Album
 		err := cursor.Decode(&album)
 		if err != nil {
@@ -85,7 +85,7 @@ func (r *AlbumRepo) DeleteAlbum(id string) bool {
 	}
 	filter := bson.D{{Key: "_id", Value: objId}}
 
-	result, _ := collection.DeleteOne(context.TODO(), filter)
+	result, _ := collection.DeleteOne(context.Background(), filter)
 
 	if result.DeletedCount > 0 {
 		log.Info("Deleted album with id: ", id)

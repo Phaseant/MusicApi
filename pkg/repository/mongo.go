@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -29,13 +28,12 @@ func InitMongo(cfg Config) (*mongo.Client, error) {
 	}
 
 	clientOpts := options.Client().ApplyURI("mongodb://localhost:27017").SetAuth(credential)
-
-	client, err := mongo.Connect(context.TODO(), clientOpts)
+	client, err := mongo.Connect(context.Background(), clientOpts)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := client.Ping(context.TODO(), readpref.Primary()); err != nil {
+	if err := client.Ping(context.Background(), readpref.Primary()); err != nil {
 		return nil, err
 	}
 

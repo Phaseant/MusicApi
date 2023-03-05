@@ -21,7 +21,7 @@ func NewAuthMongo(db *mongo.Client) *AuthMongo {
 func (r *AuthMongo) NewUser(user entity.User) (string, error) {
 	collection := r.db.Database(DBName).Collection(UserCol)
 	user.Id = primitive.NewObjectID()
-	_, err := collection.InsertOne(context.TODO(), user)
+	_, err := collection.InsertOne(context.Background(), user)
 
 	if err != nil {
 		return "", err
@@ -39,7 +39,7 @@ func (r *AuthMongo) GetUser(username, password string) (entity.User, error) {
 		bson.D{{Key: "password", Value: password}},
 	}}
 
-	err := collection.FindOne(context.TODO(), filter).Decode(&user)
+	err := collection.FindOne(context.Background(), filter).Decode(&user)
 	if err != nil {
 		return entity.User{}, err
 	}

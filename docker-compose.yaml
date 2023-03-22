@@ -11,5 +11,17 @@ services:
     volumes:
       - mongodb_data_container:/data/db
 
+  server_container:
+    image: music-server:1.0
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - mongodb_container
+    command:
+      - ./MusicAPI
+
+
 volumes:
   mongodb_data_container:

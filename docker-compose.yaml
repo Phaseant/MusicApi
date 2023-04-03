@@ -11,5 +11,17 @@ services:
     volumes:
       - mongodb_data_container:/data/db
 
+  server_container:
+    build: .
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/app
+    depends_on:
+      - mongodb_container
+    command: go run cmd/main.go --reload
+    # environment:
+    #   - GIN_MODE=release
+
 volumes:
   mongodb_data_container:

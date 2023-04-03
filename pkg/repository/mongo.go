@@ -27,7 +27,7 @@ func InitMongo(cfg Config) (*mongo.Client, error) {
 		Password: cfg.Password,
 	}
 
-	clientOpts := options.Client().ApplyURI("mongodb://localhost:27017").SetAuth(credential)
+	clientOpts := options.Client().ApplyURI("mongodb://mongodb_container:27017").SetAuth(credential)
 	client, err := mongo.Connect(context.Background(), clientOpts)
 	if err != nil {
 		return nil, err

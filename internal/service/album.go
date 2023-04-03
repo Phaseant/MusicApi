@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/Phaseant/MusicAPI/entity"
-	"github.com/Phaseant/MusicAPI/pkg/repository"
+	"github.com/Phaseant/MusicAPI/internal/repository"
 )
 
 type AlbumService struct {

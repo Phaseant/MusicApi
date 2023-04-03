@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/Phaseant/MusicAPI/entity"
-	"github.com/Phaseant/MusicAPI/pkg/service"
-	mock_service "github.com/Phaseant/MusicAPI/pkg/service/mocks"
+	"github.com/Phaseant/MusicAPI/internal/service"
+	mock_service "github.com/Phaseant/MusicAPI/internal/service/mocks"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/assert"
 	"github.com/golang/mock/gomock"

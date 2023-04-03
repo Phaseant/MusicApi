@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/Phaseant/MusicAPI/pkg/service"
+	"github.com/Phaseant/MusicAPI/internal/service"
 	"github.com/gin-gonic/gin"
 )
 

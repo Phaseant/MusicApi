@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/Phaseant/MusicAPI/entity"
-	"github.com/Phaseant/MusicAPI/pkg/repository"
+	"github.com/Phaseant/MusicAPI/internal/repository"
 	"github.com/golang-jwt/jwt/v5"
 	log "github.com/sirupsen/logrus"
 )

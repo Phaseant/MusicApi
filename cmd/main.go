@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Phaseant/MusicAPI/pkg/handler"
-	"github.com/Phaseant/MusicAPI/pkg/repository"
-	"github.com/Phaseant/MusicAPI/pkg/server"
-	"github.com/Phaseant/MusicAPI/pkg/service"
+	"github.com/Phaseant/MusicAPI/internal/handler"
+	"github.com/Phaseant/MusicAPI/internal/repository"
+	"github.com/Phaseant/MusicAPI/internal/server"
+	"github.com/Phaseant/MusicAPI/internal/service"
 
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"

@@ -1,11 +1,13 @@
 FROM golang:1.20.2
 
-WORKDIR app
+WORKDIR /app
+
+COPY go.mod .
+RUN go mod download
+
 
 COPY . ./
 
-RUN go mod tidy
-
 RUN go build -o ./MusicAPI cmd/main.go
 
-CMD [ "/MusicAPI" ]
+CMD [ "./MusicAPI" ]

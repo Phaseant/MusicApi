@@ -12,16 +12,16 @@ services:
       - mongodb_data_container:/data/db
 
   server_container:
-    image: music-server:1.0
+    build: .
     ports:
       - 8000:8000
     volumes:
-      - .:/usr/src/app
+      - ./:/app
     depends_on:
       - mongodb_container
-    command:
-      - ./MusicAPI
-
+    command: go run cmd/main.go --reload
+    # environment:
+    #   - GIN_MODE=release
 
 volumes:
   mongodb_data_container:

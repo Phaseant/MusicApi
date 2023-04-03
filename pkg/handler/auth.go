@@ -12,22 +12,22 @@ import (
 func (h *Handler) register(c *gin.Context) {
 	var user entity.User
 	if err := c.ShouldBindJSON(&user); err != nil {
-		log.Errorf("error while binding User JSON: %v", err)
-		c.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+		log.Errorf("register: error while binding User JSON: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	id, err := h.services.Autorization.NewUser(user)
 
 	if mongo.IsDuplicateKeyError(err) {
-		log.Errorf("%v", err)
-		c.JSON(http.StatusBadRequest, gin.H{"Error": "This user is already exists"})
+		log.Errorf("register: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "this user already exists"})
 		return
 	}
 
 	if err != nil {
-		log.Errorf("Error trying to create new user: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": "internal error"})
+		log.Errorf("register: error trying to create new user: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal error, try again later"})
 		return
 	}
 
@@ -37,15 +37,15 @@ func (h *Handler) register(c *gin.Context) {
 func (h *Handler) login(c *gin.Context) {
 	var user entity.User
 	if err := c.ShouldBindJSON(&user); err != nil {
-		log.Errorf("Sign-In: Error while binding User JSON: %v", err)
-		c.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+		log.Errorf("login: error while binding User JSON: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	token, err := h.services.Autorization.GenerateToken(user.Username, user.Password)
 	if err != nil {
-		log.Errorf("Error trying to create token: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		log.Errorf("login: error trying to create token: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

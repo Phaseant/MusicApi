@@ -50,7 +50,7 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 		return "", err
 	}
 
-	log.Info("Token for user with id: ", user.Id.Hex(), " generated")
+	log.Info("service.GenerateToken: token for user with id: %s generated", user.Id.Hex())
 	return signedToken, nil
 }
 
@@ -72,7 +72,7 @@ func (s *AuthService) ParseToken(accessToken string) (string, error) {
 	if ok && token.Valid && isExists {
 		return fmt.Sprintf("%s", claims["userID"]), err
 	} else {
-		return "", errors.New("no user id in claims")
+		return "", errors.New("service.ParseToken: user id not found in claims")
 	}
 }
 

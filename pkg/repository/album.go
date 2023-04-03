@@ -26,7 +26,7 @@ func (r *AlbumRepo) AddAlbum(album entity.Album) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	log.Info("Added a new album with id: ", album.Id.Hex())
+	log.Info("repo.AddAlbum: added a new album with id: ", album.Id.Hex())
 	return album.Id.Hex(), nil
 }
 
@@ -46,7 +46,7 @@ func (r *AlbumRepo) GetAlbum(id string) (entity.Album, error) {
 	if err != nil {
 		return entity.Album{}, err
 	}
-	log.Info("Returned album with id: ", album.Id.Hex())
+	log.Info("repo.GetAlbum: returned album with id: ", album.Id.Hex())
 	return album, nil
 }
 
@@ -72,7 +72,7 @@ func (r *AlbumRepo) GetAllAlbums() ([]entity.Album, error) {
 	if err := cursor.Err(); err != nil {
 		return []entity.Album{}, err
 	}
-	log.Info("Returned all albums from database")
+	log.Info("repo.GetAllAlbums: returned all albums from database")
 	return albums, nil
 }
 
@@ -88,7 +88,7 @@ func (r *AlbumRepo) DeleteAlbum(id string) bool {
 	result, _ := collection.DeleteOne(context.Background(), filter)
 
 	if result.DeletedCount > 0 {
-		log.Info("Deleted album with id: ", id)
+		log.Info("repo.DeleteAlbum: deleted album with id: ", id)
 	}
 
 	return result.DeletedCount != 0 //if deleted returns true

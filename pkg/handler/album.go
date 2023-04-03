@@ -18,33 +18,33 @@ func (h *Handler) createAlbum(c *gin.Context) {
 	var album entity.Album
 
 	if err := c.ShouldBindJSON(&album); err != nil {
-		log.Errorf("CreateAlbum: Error while binding User JSON: %v", err)
-		c.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+		log.Errorf("createAlbum: error while binding User JSON: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	id, err := h.services.Album.NewAlbum(album)
 
 	if mongo.IsDuplicateKeyError(err) {
-		log.Errorf("%v", err)
-		c.JSON(http.StatusBadRequest, gin.H{"Error": "this album is already exists"})
+		log.Errorf("createAlbum: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "unable to add album, this album already exists"})
 		return
 	}
 
 	if err != nil {
-		log.Errorf("Error trying to add new album: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		log.Errorf("createAlbum: error adding new album: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"ID": id})
+	c.JSON(http.StatusOK, gin.H{"added": true, "id": id})
 }
 
 func (h *Handler) getAllAlbums(c *gin.Context) {
 	albums, err := h.services.GetAllAlbums()
 	if err != nil {
-		log.Errorf("Error getting all albums: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		log.Errorf("getAllAlbums: error getting all albums: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -57,8 +57,8 @@ func (h *Handler) getAlbum(c *gin.Context) {
 	album, err := h.services.GetAlbum(albumId)
 
 	if err != nil {
-		log.Errorf("Error finding album: %v", err)
-		c.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+		log.Errorf("getAlbum: error finding album with id %s: %v", albumId, err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -75,8 +75,8 @@ func (h *Handler) deleteAlbum(c *gin.Context) {
 
 	ok = h.services.DeleteAlbum(albumId)
 	if !ok {
-		log.Info("album not found, id: ", albumId)
-		c.JSON(http.StatusBadRequest, gin.H{"Error": "Album not found", "Deleted": false})
+		log.Info("album with id %s not found: ", albumId)
+		c.JSON(http.StatusBadRequest, gin.H{"deleted": false, "error": "album not found"})
 		return
 	}
 

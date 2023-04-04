@@ -45,7 +45,7 @@ func (h *Handler) login(c *gin.Context) {
 	token, err := h.services.Autorization.GenerateToken(user.Username, user.Password)
 	if err != nil {
 		log.Errorf("login: error trying to create token: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "wrong username of password"})
 		return
 	}
 

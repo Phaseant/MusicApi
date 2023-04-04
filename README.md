@@ -47,4 +47,4 @@ Then use your prefered HTTP Client. By default, URL is `http://localhost:8000/`
  - `POST http://localhost:8000/auth/register` Create new user
  - `POST http://localhost:8000/auth/login` Login to your account.
  
- **Examples of requests you can find in [requests.txt](requests.txt)**
+ **Examples of requests you can find in [requests.md](requests.md)**

@@ -7,21 +7,18 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: funnycat
     ports:
-      - 27017:27017
+      - 27017:27018
     volumes:
       - mongodb_data_container:/data/db
 
   server_container:
-    build: .
+    image: phaseant/music_api:1.0
     ports:
-      - 8000:8000
-    volumes:
-      - ./:/app
+      - 8000:9000
     depends_on:
       - mongodb_container
-    command: go run cmd/main.go --reload
-    # environment:
-    #   - GIN_MODE=release
+    environment:
+      - GIN_MODE=release
 
 volumes:
   mongodb_data_container:
